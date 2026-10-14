@@ -1,0 +1,10 @@
+# binarios e objetos
+*.exe
+*.o
+*.obj
+*.d
+*.out
+a.out
+
+# editores
+.vscode/
