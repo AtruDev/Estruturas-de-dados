@@ -25,6 +25,8 @@ int removeiniListade(tp_listade **l, tp_item *e) { tp_listade *a = *l; if (!a) r
 int removefimListade(tp_listade **l, tp_item *e) { tp_listade *a = *l; if (!a) return 0; while (a->prox) a = a->prox; *e = a->dado; if (a->ant) a->ant->prox = NULL; else *l = NULL; free(a); return 1; }
 int removeValorListade(tp_listade **l, tp_item e) { tp_listade *a = buscaListade(*l, e); if (!a) return 0; if (a->ant) a->ant->prox = a->prox; else *l = a->prox; if (a->prox) a->prox->ant = a->ant; free(a); return 1; }
 int liberaListade(tp_listade **l) { tp_listade *a = *l, *p; if (!a) return 0; while (a) { p = a->prox; free(a); a = p; } *l = NULL; return 1; }
+int ehPalindromoListade(tp_listade *l) { tp_listade *i = l, *f = l; if (!l) return 1; while (f->prox) f = f->prox; for (; i != f && i->ant != f; i = i->prox, f = f->ant) if (i->dado != f->dado) return 0; return 1; }
+int trocaNosListade(tp_listade **l, tp_item a, tp_item b) { tp_listade *x = buscaListade(*l, a), *y = buscaListade(*l, b), *t, *ax, *py; if (!x || !y) return 0; if (x == y) return 1; for (t = x; t && t != y; t = t->prox); if (!t) { t = x; x = y; y = t; } ax = x->ant; py = y->prox; if (x->prox == y) { y->prox = x; x->ant = y; } else { tp_listade *px = x->prox, *ay = y->ant; y->prox = px; px->ant = y; x->ant = ay; ay->prox = x; } y->ant = ax; x->prox = py; if (ax) ax->prox = y; else *l = y; if (py) py->ant = x; return 1; }
 #endif
 typedef tp_listade tp_filadin;
 tp_filadin *inicializarFiladin() { return inicializarListade(); }
@@ -35,4 +37,5 @@ int frontFiladin(tp_filadin *f, tp_item *e) { if (!f) return 0; *e = f->dado; re
 int tamanhoFiladin(tp_filadin *f) { return tamanhoListade(f); }
 void imprimeFiladin(tp_filadin *f) { imprimeListade(f); }
 int liberaFiladin(tp_filadin **f) { return liberaListade(f); }
+int josephus(int n, int k) { tp_filadin *f = NULL; tp_item e; int i, v; if (n <= 0 || k <= 0) return 0; for (i = 1; i <= n; i++) enqueueFiladin(&f, i); for (v = n; v > 1; v--) { for (i = 1; i < k; i++) { dequeueFiladin(&f, &e); enqueueFiladin(&f, e); } dequeueFiladin(&f, &e); printf("%d ", e); } printf("\n"); dequeueFiladin(&f, &e); return e; }
 #endif

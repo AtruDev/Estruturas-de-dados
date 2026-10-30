@@ -1,7 +1,8 @@
 # Estruturas comprimidas (beecrowd)
 
-Mesmas estruturas de `../pilha.h` e `../fila.h`, com a mesma API (nomes de
-funcoes e tipos identicos), so que em formato compacto para **colar direto no
+Mesmas estruturas da pasta `../` (pilha, fila, listase, listade, pilhaDin e
+filaDin), com a mesma API (nomes de funcoes e tipos identicos), so que em
+formato compacto para **colar direto no
 topo do arquivo** — o beecrowd aceita apenas um arquivo, entao `#include "pilha.h"`
 nao funciona la.
 
@@ -50,4 +51,3 @@ Mesma API dos originais em `../`. Cada arquivo e autossuficiente:
 - As structs internas viraram `no_se` e `no_de` (antes as duas eram `struct no`),
   entao da para colar **todas juntas** no mesmo arquivo sem erro de redefinicao.
   Os nomes de tipo (`tp_lista`, `tp_listade`, ...) nao mudaram.
-- `destruirNosImparListase` ficou de fora porque ainda esta incompleta no original.

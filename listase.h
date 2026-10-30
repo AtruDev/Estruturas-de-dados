@@ -165,13 +165,79 @@ int inseriOrdenadoListase(tp_lista **l, tp_item e){
     return 1;
 }
 
-int destruirNosImparListase(tp_lista **l){
-    tp_lista *atu = *l;
-    
+int removeValorListase(tp_lista **l, tp_item e){
+    tp_lista *atu = *l, *ant = NULL;
+    while(atu != NULL && atu->dado != e){
+        ant = atu;
+        atu = atu->prox;
+    }
+    if(atu == NULL) return 0;
+    if(ant == NULL){
+        *l = atu->prox;
+    } else {
+        ant->prox = atu->prox;
+    }
+    free(atu);
+    return 1;
 }
 
+int destruirNosImparListase(tp_lista **l){
+    tp_lista *atu = *l, *ant = NULL, *prox;
+    int cont = 0;
+    while(atu != NULL){
+        prox = atu->prox;
+        if(atu->dado % 2 != 0){
+            if(ant == NULL){
+                *l = prox;
+            } else {
+                ant->prox = prox;
+            }
+            free(atu);
+            cont++;
+        } else {
+            ant = atu;
+        }
+        atu = prox;
+    }
+    return cont;
+}
+void inverteListase(tp_lista **l){
+    tp_lista *atu = *l, *ant = NULL, *prox;
+    while(atu != NULL){
+        prox = atu->prox;
+        atu->prox = ant;
+        ant = atu;
+        atu = prox;
+    }
+    *l = ant;
+}
 
-
-
+tp_lista *intercalaListase(tp_lista *l1, tp_lista *l2){
+    tp_lista *nova = NULL, *fim = NULL, *novo_no;
+    tp_item e;
+    while(l1 != NULL || l2 != NULL){
+        if(l2 == NULL || (l1 != NULL && l1->dado <= l2->dado)){
+            e = l1->dado;
+            l1 = l1->prox;
+        } else {
+            e = l2->dado;
+            l2 = l2->prox;
+        }
+        novo_no = malloc(sizeof(tp_lista));
+        if(novo_no == NULL){
+            liberaListase(&nova);
+            return NULL;
+        }
+        novo_no->dado = e;
+        novo_no->prox = NULL;
+        if(fim == NULL){
+            nova = novo_no;
+        } else {
+            fim->prox = novo_no;
+        }
+        fim = novo_no;
+    }
+    return nova;
+}
 
 #endif

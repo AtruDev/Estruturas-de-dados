@@ -216,4 +216,63 @@ int liberaListade(tp_listade **l) {
     return 1;
 }
 
+// ===================== Exercicios =====================
+int ehPalindromoListade(tp_listade *l) {
+    tp_listade *ini = l, *fim = l;
+    if (vaziaListade(l)) return 1;
+    while (fim->prox != NULL) {
+        fim = fim->prox;
+    }
+    while (ini != fim && ini->ant != fim) {
+        if (ini->dado != fim->dado) return 0;
+        ini = ini->prox;
+        fim = fim->ant;
+    }
+    return 1;
+}
+
+int trocaNosListade(tp_listade **l, tp_item a, tp_item b) {
+    tp_listade *x = buscaListade(*l, a);
+    tp_listade *y = buscaListade(*l, b);
+    tp_listade *aux, *antX, *proxY;
+    if (x == NULL || y == NULL) return 0;
+    if (x == y) return 1;
+
+    // garante que x vem antes de y
+    aux = x;
+    while (aux != NULL && aux != y) {
+        aux = aux->prox;
+    }
+    if (aux == NULL) {
+        aux = x;
+        x = y;
+        y = aux;
+    }
+
+    antX = x->ant;
+    proxY = y->prox;
+    if (x->prox == y) {
+        // vizinhos: antX <-> y <-> x <-> proxY
+        y->prox = x;
+        x->ant = y;
+    } else {
+        tp_listade *proxX = x->prox, *antY = y->ant;
+        y->prox = proxX;
+        proxX->ant = y;
+        x->ant = antY;
+        antY->prox = x;
+    }
+    y->ant = antX;
+    x->prox = proxY;
+    if (antX == NULL) {
+        *l = y;
+    } else {
+        antX->prox = y;
+    }
+    if (proxY != NULL) {
+        proxY->ant = x;
+    }
+    return 1;
+}
+
 #endif

@@ -34,4 +34,26 @@ int  liberaFiladin(tp_filadin **f){
     return liberaListade(f);
 }
 
+// imprime a ordem de eliminacao e retorna o sobrevivente
+int josephus(int n, int k){
+    tp_filadin *f = inicializarFiladin();
+    tp_item e;
+    int i, vivos;
+    if(n <= 0 || k <= 0) return 0;
+    for(i = 1; i <= n; i++){
+        enqueueFiladin(&f, i);
+    }
+    for(vivos = n; vivos > 1; vivos--){
+        for(i = 1; i < k; i++){
+            dequeueFiladin(&f, &e);
+            enqueueFiladin(&f, e);
+        }
+        dequeueFiladin(&f, &e);
+        printf("%d ", e);
+    }
+    printf("\n");
+    dequeueFiladin(&f, &e);
+    return e;
+}
+
 #endif

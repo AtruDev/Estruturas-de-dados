@@ -22,7 +22,11 @@ int tamanhoListase(tp_lista *l) { int c = 0; for (; l; l = l->prox) c++; return 
 int maiorQueListase(tp_lista *l, tp_item x) { int c = 0; for (; l; l = l->prox) if (l->dado > x) c++; return c; }
 int listasIdenticasListase(tp_lista *l1, tp_lista *l2) { if (tamanhoListase(l1) != tamanhoListase(l2)) return 0; for (; l1 && l2; l1 = l1->prox, l2 = l2->prox) if (l1->dado != l2->dado) return 0; return 1; }
 void imprimeListase(tp_lista *l) { if (!l) { printf("Lista vazia\n"); return; } for (; l; l = l->prox) printf("%d\n", l->dado); }
+int removeValorListase(tp_lista **l, tp_item e) { tp_lista *a = *l, *ant = NULL; while (a && a->dado != e) { ant = a; a = a->prox; } if (!a) return 0; if (ant) ant->prox = a->prox; else *l = a->prox; free(a); return 1; }
+int destruirNosImparListase(tp_lista **l) { tp_lista *a = *l, *ant = NULL, *p; int c = 0; while (a) { p = a->prox; if (a->dado % 2 != 0) { if (ant) ant->prox = p; else *l = p; free(a); c++; } else ant = a; a = p; } return c; }
 int liberaListase(tp_lista **l) { tp_lista *a = *l, *p; if (!a) return 0; while (a) { p = a->prox; free(a); a = p; } *l = NULL; return 1; }
+void inverteListase(tp_lista **l) { tp_lista *a = *l, *ant = NULL, *p; while (a) { p = a->prox; a->prox = ant; ant = a; a = p; } *l = ant; }
+tp_lista *intercalaListase(tp_lista *l1, tp_lista *l2) { tp_lista *nova = NULL, *fim = NULL, *n; tp_item e; while (l1 || l2) { if (!l2 || (l1 && l1->dado <= l2->dado)) { e = l1->dado; l1 = l1->prox; } else { e = l2->dado; l2 = l2->prox; } if (!(n = malloc(sizeof(tp_lista)))) { liberaListase(&nova); return NULL; } n->dado = e; n->prox = NULL; if (fim) fim->prox = n; else nova = n; fim = n; } return nova; }
 #endif
 typedef tp_lista tp_pilhadin;
 tp_pilhadin *inicializarPilhadin() { return inicializarListase(); }
@@ -33,4 +37,7 @@ int topPilhadin(tp_pilhadin *p, tp_item *e) { if (!p) return 0; *e = p->dado; re
 int tamanhoPilhadin(tp_pilhadin *p) { return tamanhoListase(p); }
 void imprimePilhadin(tp_pilhadin *p) { imprimeListase(p); }
 int liberaPilhadin(tp_pilhadin **p) { return liberaListase(p); }
+void ordenaPilhadin(tp_pilhadin **p) { tp_pilhadin *aux = NULL; tp_item e, t; while (popPilhadin(p, &e)) { while (topPilhadin(aux, &t) && t < e) { popPilhadin(&aux, &t); pushPilhadin(p, t); } pushPilhadin(&aux, e); } *p = aux; }
+char abreDe(char c) { return c == ')' ? '(' : c == ']' ? '[' : '{'; }
+int balanceado(char *s) { tp_pilhadin *p = NULL; tp_item t; int ok; for (; *s; s++) { if (*s == '(' || *s == '[' || *s == '{') pushPilhadin(&p, *s); else if (*s == ')' || *s == ']' || *s == '}') { if (!popPilhadin(&p, &t) || t != abreDe(*s)) { liberaPilhadin(&p); return 0; } } } ok = !p; liberaPilhadin(&p); return ok; }
 #endif

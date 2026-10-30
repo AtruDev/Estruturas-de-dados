@@ -41,4 +41,45 @@ int liberaPilhadin(tp_pilhadin **p){
     return liberaListase(p);
 }
 
+// menor elemento no topo, usando so uma pilha auxiliar
+void ordenaPilhadin(tp_pilhadin **p){
+    tp_pilhadin *aux = inicializarPilhadin();
+    tp_item e, t;
+    while(popPilhadin(p, &e)){
+        // aux fica sempre com o menor no topo
+        while(topPilhadin(aux, &t) && t < e){
+            popPilhadin(&aux, &t);
+            pushPilhadin(p, t);
+        }
+        pushPilhadin(&aux, e);
+    }
+    *p = aux;
+}
+
+char abreDe(char c){
+    if(c == ')') return '(';
+    if(c == ']') return '[';
+    return '{';
+}
+
+int balanceado(char *s){
+    tp_pilhadin *p;
+    tp_item topo;
+    int ok;
+    p = inicializarPilhadin();
+    for(; *s != '\0'; s++){
+        if(*s == '(' || *s == '[' || *s == '{'){
+            pushPilhadin(&p, *s);
+        } else if(*s == ')' || *s == ']' || *s == '}'){
+            if(!popPilhadin(&p, &topo) || topo != abreDe(*s)){
+                liberaPilhadin(&p);
+                return 0;
+            }
+        }
+    }
+    ok = vaziaPilhadin(p);
+    liberaPilhadin(&p);
+    return ok;
+}
+
 #endif
