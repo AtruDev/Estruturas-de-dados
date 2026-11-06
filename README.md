@@ -14,6 +14,7 @@ Estruturas de Dados (AED). Cada estrutura e um header unico, auto-contido
 | `listade.h` | Lista duplamente encadeada | nos dinamicos com `ant` e `prox` |
 | `pilhaDin.h` | Pilha dinamica (LIFO) | sobre `listase.h` |
 | `filaDin.h` | Fila dinamica (FIFO) | sobre `listade.h` |
+| `abb.h` | Arvore binaria de busca (ABB) | nos dinamicos com `esq` e `dir` |
 | `exercicios/` | Testes das listas de exercicios (um `.c` por estrutura) | ver abaixo |
 | `comprimidas/` | Todas as acima em formato compacto para o beecrowd | ver [README](comprimidas/README.md) |
 
@@ -153,6 +154,21 @@ void imprimeFiladin(tp_filadin *f);
 int  liberaFiladin(tp_filadin **f);
 int  josephus(int n, int k);                     /* imprime a ordem de eliminacao; retorna o sobrevivente */
 ```
+
+### `abb.h`
+
+```c
+tp_arvore *inicializarAbb(void);                 /* arvore vazia = NULL */
+int  vaziaAbb(tp_arvore *r);
+int  insereAbb(tp_arvore **r, tp_item e);        /* iterativo; 0 se faltar memoria */
+tp_arvore *buscaAbb(tp_arvore *r, tp_item e);    /* NULL se nao achar */
+void preOrdemAbb(tp_arvore *r);                  /* raiz, esq, dir */
+void emOrdemAbb(tp_arvore *r);                   /* esq, raiz, dir: imprime em ordem crescente */
+void posOrdemAbb(tp_arvore *r);                  /* esq, dir, raiz */
+```
+
+Valores menores vao para a esquerda; valores iguais ou maiores vao para a
+direita, entao elementos repetidos sao aceitos.
 
 ## Exercicios
 
