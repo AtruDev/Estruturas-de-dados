@@ -45,13 +45,13 @@ int insereAbb(tp_arvore **r, tp_item e){
             pai->dir = novo_no;
         }
     }
-return 1;
+    return 1;
 }
 
 tp_arvore *buscaAbb(tp_arvore *r, tp_item e){
     tp_arvore *atu = r;
     while(atu != NULL && atu->dado != e){
-        if(e < atu->dado ){
+        if(e < atu->dado){
             atu = atu->esq;
         } else {
             atu = atu->dir;
@@ -79,6 +79,89 @@ void posOrdemAbb(tp_arvore *r){
     posOrdemAbb(r->esq);
     posOrdemAbb(r->dir);
     printf("%d ", r->dado);
+}
+
+// Altura = numero de niveis (vazia = 0, folha = 1)
+int alturaAbb(tp_arvore *r){
+    if(r == NULL) return 0;
+    int altEsq = alturaAbb(r->esq);
+    int altDir = alturaAbb(r->dir);
+    if(altEsq > altDir){
+        return altEsq + 1;
+    } else {
+        return altDir + 1;
+    }
+}
+
+// Tamanho = quantidade de nos
+int tamanhoAbb(tp_arvore *r){
+    if(r == NULL) return 0;
+    int tamEsq = tamanhoAbb(r->esq);
+    int tamDir = tamanhoAbb(r->dir);
+    return tamDir + tamEsq + 1;
+}
+
+tp_arvore *minimoAbb(tp_arvore *r){
+    if(r == NULL) return NULL;
+    tp_arvore *atu = r;
+    while(atu->esq != NULL){
+        atu = atu->esq;
+    }
+    return atu;
+}
+
+tp_arvore *maximoAbb(tp_arvore *r){
+    if(r == NULL) return NULL;
+    tp_arvore *atu = r;
+    while(atu->dir != NULL){
+        atu = atu->dir;
+    }
+    return atu;
+}
+
+// Remove 1 ocorrencia; 0 se nao achar.
+// No com 2 filhos: copia o sucessor (menor da subarvore direita) e remove o sucessor.
+int removeValorAbb(tp_arvore **r, tp_item e){
+    tp_arvore *atu = *r, *pai = NULL, *temp = NULL, *filho = NULL;
+    while(atu != NULL && atu->dado != e){
+        pai = atu;
+        if(e < atu->dado){
+            atu = atu->esq;
+        } else {
+            atu = atu->dir;
+        }
+    }
+    if(atu == NULL) return 0;
+    if(atu->esq != NULL && atu->dir != NULL){
+        pai = atu;
+        temp = atu->dir;
+        while(temp->esq != NULL){
+            pai = temp;
+            temp = temp->esq;
+        }
+        atu->dado = temp->dado;
+        atu = temp;
+    }
+    if(atu->esq != NULL) filho = atu->esq;
+    else filho = atu->dir;
+    if(pai == NULL) *r = filho;
+    else if(pai->esq == atu) pai->esq = filho;
+    else pai->dir = filho;
+    free(atu);
+    return 1;
+}
+
+//funcao auxiliar a liberaAbb
+void liberaNoAbb(tp_arvore *r){
+    if(r == NULL) return;
+    liberaNoAbb(r->esq);
+    liberaNoAbb(r->dir);
+    free(r);
+}
+
+void liberaAbb(tp_arvore **r){
+    liberaNoAbb(*r);
+    *r = NULL;
 }
 
 #endif

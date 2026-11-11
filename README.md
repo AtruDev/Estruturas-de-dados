@@ -165,10 +165,23 @@ tp_arvore *buscaAbb(tp_arvore *r, tp_item e);    /* NULL se nao achar */
 void preOrdemAbb(tp_arvore *r);                  /* raiz, esq, dir */
 void emOrdemAbb(tp_arvore *r);                   /* esq, raiz, dir: imprime em ordem crescente */
 void posOrdemAbb(tp_arvore *r);                  /* esq, dir, raiz */
+int  alturaAbb(tp_arvore *r);                    /* numero de niveis: vazia = 0, folha = 1 */
+int  tamanhoAbb(tp_arvore *r);                   /* quantidade de nos */
+tp_arvore *minimoAbb(tp_arvore *r);              /* NULL se vazia */
+tp_arvore *maximoAbb(tp_arvore *r);              /* NULL se vazia */
+int  removeValorAbb(tp_arvore **r, tp_item e);   /* remove 1 ocorrencia; 0 se nao achar */
+void liberaNoAbb(tp_arvore *r);                  /* auxiliar da liberaAbb */
+void liberaAbb(tp_arvore **r);                   /* libera todos os nos; *r = NULL */
 ```
 
 Valores menores vao para a esquerda; valores iguais ou maiores vao para a
-direita, entao elementos repetidos sao aceitos.
+direita, entao elementos repetidos sao aceitos. Na remocao de um no com 2
+filhos, o valor dele e trocado pelo do sucessor (menor da subarvore direita) e
+o sucessor e removido.
+
+Complexidade: busca, insercao e remocao sao O(h), onde h e a altura — O(log n)
+com a arvore balanceada, O(n) no pior caso (inserir em ordem vira uma lista).
+Percursos, altura, tamanho e liberacao visitam todos os nos: O(n).
 
 ## Exercicios
 
@@ -181,5 +194,6 @@ Cada um imprime o resultado ao lado do valor esperado.
 | `ex_listade.c` | `ehPalindromoListade`, `trocaNosListade` |
 | `ex_pilhadin.c` | `balanceado`, `ordenaPilhadin` |
 | `ex_filadin.c` | `josephus`, `inverteKFiladin` (definida no proprio arquivo, usa pilha + fila) |
+| `ex_abb.c` | `alturaAbb`, `tamanhoAbb`, `minimoAbb`, `maximoAbb`, `removeValorAbb`, `liberaAbb` |
 
 Compilar de dentro de `exercicios/`: `gcc ex_listase.c -o ex_listase`
