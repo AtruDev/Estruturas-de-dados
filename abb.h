@@ -164,4 +164,37 @@ void liberaAbb(tp_arvore **r){
     *r = NULL;
 }
 
+// Posicao de dado em infixa[esq..dir]; -1 se nao achar
+int buscaInfixa(char *infixa, int esq, int dir, tp_item dado){
+    int i;
+    for(i = esq; i <= dir; i++) if(infixa[i] == dado) return i;
+    return -1;
+}
+
+// Auxiliar da montaArvore: *pos e o proximo elemento da prefixa a ser usado
+tp_arvore *montaArvoreAux(char prefixa[], char infixa[], int esq, int dir, int *pos){
+    if(esq > dir) return NULL;
+
+    tp_arvore *no = malloc(sizeof(tp_arvore));
+    if(no == NULL) return NULL;
+    no->dado = prefixa[*pos];   // na prefixa, a raiz vem primeiro
+    (*pos)++;
+
+    int meio = buscaInfixa(infixa, esq, dir, no->dado);
+    if(meio == -1){             // prefixa e infixa nao batem
+        free(no);
+        return NULL;
+    }
+    // na infixa, o que esta antes da raiz e a subarvore esquerda e o que esta depois e a direita
+    no->esq = montaArvoreAux(prefixa, infixa, esq, meio - 1, pos);
+    no->dir = montaArvoreAux(prefixa, infixa, meio + 1, dir, pos);
+    return no;
+}
+
+// Reconstroi a arvore a partir dos percursos prefixo e infixo (sem elementos repetidos).
+// Chamar com esq = 0 e dir = tamanho - 1. Os dados ficam como codigo do char (imprimir com %c).
+tp_arvore *montaArvore(char prefixa[], char infixa[], int esq, int dir){
+    int pos = 0;
+    return montaArvoreAux(prefixa, infixa, esq, dir, &pos);
+}
 #endif

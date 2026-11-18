@@ -1,7 +1,7 @@
 # Estruturas comprimidas (beecrowd)
 
 Mesmas estruturas da pasta `../` (pilha, fila, listase, listade, pilhaDin,
-filaDin e abb), com a mesma API (nomes de funcoes e tipos identicos), so que em
+filaDin, abb, avl e trie), com a mesma API (nomes de funcoes e tipos identicos), so que em
 formato compacto para **colar direto no
 topo do arquivo** — o beecrowd aceita apenas um arquivo, entao `#include "pilha.h"`
 nao funciona la.
@@ -34,7 +34,7 @@ int main(void) {
 Comportamento e o mesmo dos originais. A fila continua circular, ou seja,
 guarda no maximo `MAX_FILA - 1` elementos.
 
-## Estruturas dinamicas (listase, listade, pilhaDin, filaDin, abb)
+## Estruturas dinamicas (listase, listade, pilhaDin, filaDin, abb, avl, trie)
 
 Mesma API dos originais em `../`. Cada arquivo e autossuficiente:
 
@@ -45,6 +45,8 @@ Mesma API dos originais em `../`. Cada arquivo e autossuficiente:
 | `pilhaDin.h` | pilha dinamica **+ listase embutida** |
 | `filaDin.h` | fila dinamica **+ listade embutida** |
 | `abb.h` | arvore binaria de busca |
+| `avl.h` | arvore AVL |
+| `trie.h` | arvore trie |
 
 - Para a pilha ou a fila dinamica, cole **so** o `pilhaDin.h`/`filaDin.h`: a lista
   que ela usa ja vem junto. Se a lista ja tiver sido colada antes, o
@@ -52,5 +54,5 @@ Mesma API dos originais em `../`. Cada arquivo e autossuficiente:
 - As structs internas viraram `no_se` e `no_de` (antes as duas eram `struct no`),
   entao da para colar **todas juntas** no mesmo arquivo sem erro de redefinicao.
   Os nomes de tipo (`tp_lista`, `tp_listade`, ...) nao mudaram.
-- A struct da ABB se chama `no_abb`, entao `abb.h` tambem pode ser colada junto
-  com as outras.
+- As structs das arvores se chamam `no_abb`, `no_avl` e `no_trie`, entao
+  `abb.h`, `avl.h` e `trie.h` tambem podem ser coladas junto com as outras.
